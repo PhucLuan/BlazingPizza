@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace BlazingPizza.Server;
 
 [Route("orders")]
 [ApiController]
-// [Authorize]
+[Authorize]
 public class OrdersController : Controller
 {
     private readonly PizzaStoreContext _db;
@@ -20,7 +21,7 @@ public class OrdersController : Controller
     public async Task<ActionResult<List<OrderWithStatus>>> GetOrders()
     {
         var orders = await _db.Orders
-                // .Where(o => o.UserId == GetUserId())
+                .Where(o => o.UserId == GetUserId())
                 .Include(o => o.DeliveryLocation)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Special)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Toppings).ThenInclude(t => t.Topping)
@@ -35,7 +36,7 @@ public class OrdersController : Controller
     {
         var order = await _db.Orders
                 .Where(o => o.OrderId == orderId)
-                // .Where(o => o.UserId == GetUserId())
+                .Where(o => o.UserId == GetUserId())
                 .Include(o => o.DeliveryLocation)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Special)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Toppings).ThenInclude(t => t.Topping)
