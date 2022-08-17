@@ -7,7 +7,7 @@ namespace BlazingPizza.Server;
 
 [Route("orders")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class OrdersController : Controller
 {
     private readonly PizzaStoreContext _db;
@@ -55,7 +55,7 @@ public class OrdersController : Controller
     {
         order.CreatedTime = DateTime.Now;
         order.DeliveryLocation = new LatLong(51.5001, -0.1239);
-        // order.UserId = GetUserId();
+        order.UserId = GetUserId();
 
         // Enforce existence of Pizza.SpecialId and Topping.ToppingId
         // in the database - prevent the submitter from making up
